@@ -21,6 +21,7 @@ public class SensesManager {
     private ScheduledFuture<?> cycleTask;
     private boolean isActive = false;
     private Random random = new Random();
+    private Sense lastSense = null; // Track the last sense applied
     
     private static final int EFFECT_DURATION = 3 * 60 * 20; // 3 minutes in ticks
     private static final int CYCLE_INTERVAL = 3 * 60; // 3 minutes in seconds
@@ -91,12 +92,28 @@ public class SensesManager {
     }
     
     private void applyRandomSense() {
-        Sense[] senses = Sense.values();
-        Sense randomSense = senses[random.nextInt(senses.length)];
-        applySense(randomSense);
+        // Clear all effects first
+        clearAllEffects();
+        
+        // Send cooldown message to all players
+        sendCooldownMessage();
+        
+        // Wait 5 seconds before applying new effect to avoid conflicts
+        scheduler.schedule(() -> {
+            Sense[] senses = Sense.values();
+            Sense randomSense;
+            
+            // Keep picking until we get a different sense than the last one
+            do {
+                randomSense = senses[random.nextInt(senses.length)];
+            } while (randomSense == lastSense && senses.length > 1);
+            
+            applySense(randomSense);
+        }, 5, TimeUnit.SECONDS);
     }
     
     public void applySense(Sense sense) {
+        lastSense = sense; // Remember this sense for next time
         GameManager gm = GameManager.getInstance();
         
         switch (sense) {
@@ -165,6 +182,22 @@ public class SensesManager {
         // Send the title message
         ClientboundSetTitleTextPacket titlePacket = new ClientboundSetTitleTextPacket(message);
         player.connection.send(titlePacket);
+    }
+    
+    private void sendCooldownMessage() {
+        Component message = Component.literal("CHOOSING NEW SENSE TO BE LOST...");
+        GameManager gm = GameManager.getInstance();
+        
+        // Send to runner
+        ServerPlayer runner = gm.getRunnerPlayer();
+        if (runner != null) {
+            sendTitleMessage(runner, message);
+        }
+        
+        // Send to all hunters
+        for (ServerPlayer hunter : gm.getHunterPlayers()) {
+            sendTitleMessage(hunter, message);
+        }
     }
     
     private void clearAllEffects() {

@@ -16,13 +16,11 @@ public class ModCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         // Register /hunter command
         dispatcher.register(Commands.literal("hunter")
-            .requires(source -> source.hasPermission(2)) // Requires OP
             .executes(ModCommands::hunterCommand)
         );
         
         // Register /runner command
         dispatcher.register(Commands.literal("runner")
-            .requires(source -> source.hasPermission(2)) // Requires OP
             .executes(ModCommands::runnerCommand)
         );
         
