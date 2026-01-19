@@ -11,6 +11,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
+@SuppressWarnings("unused")
 @EventBusSubscriber
 public class PlayerEventHandler {
     
@@ -43,10 +44,12 @@ public class PlayerEventHandler {
     }
     
     private static void giveTrackingCompass(ServerPlayer player) {
+        @SuppressWarnings("null")
         ItemStack compass = new ItemStack(Items.COMPASS);
         player.getInventory().add(compass);
     }
     
+    @SuppressWarnings("null")
     private static void updateCompassTracking(ServerPlayer hunter, ItemStack compass) {
         GameManager gm = GameManager.getInstance();
         ServerPlayer runner = gm.getRunnerPlayer();

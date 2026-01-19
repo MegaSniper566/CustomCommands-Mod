@@ -35,6 +35,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
+@SuppressWarnings("unused")
 @Mod(CustomCommands.MODID)
 public class CustomCommands {
     // Define mod id in a common place for everything to reference
@@ -46,18 +47,23 @@ public class CustomCommands {
     // Create a Deferred Register to hold Items which will all be registered under the "customcommands" namespace
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "customcommands" namespace
+    @SuppressWarnings("null")
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     // Creates a new Block with the id "customcommands:example_block", combining the namespace and path
+    @SuppressWarnings("null")
     public static final DeferredBlock<Block> EXAMPLE_BLOCK = BLOCKS.registerSimpleBlock("example_block", BlockBehaviour.Properties.of().mapColor(MapColor.STONE));
     // Creates a new BlockItem with the id "customcommands:example_block", combining the namespace and path
+    @SuppressWarnings("null")
     public static final DeferredItem<BlockItem> EXAMPLE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("example_block", EXAMPLE_BLOCK);
 
     // Creates a new food item with the id "customcommands:example_id", nutrition 1 and saturation 2
+    @SuppressWarnings("null")
     public static final DeferredItem<Item> EXAMPLE_ITEM = ITEMS.registerSimpleItem("example_item", new Item.Properties().food(new FoodProperties.Builder()
             .alwaysEdible().nutrition(1).saturationModifier(2f).build()));
 
     // Creates a creative tab with the id "customcommands:example_tab" for the example item, that is placed after the combat tab
+    @SuppressWarnings("null")
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.customcommands")) //The language key for the title of your CreativeModeTab
             .withTabsBefore(CreativeModeTabs.COMBAT)
@@ -95,6 +101,7 @@ public class CustomCommands {
     }
 
     // Add the example block item to the building blocks tab
+    @SuppressWarnings("null")
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(EXAMPLE_BLOCK_ITEM);

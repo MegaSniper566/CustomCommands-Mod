@@ -15,6 +15,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("unused")
 public class SensesManager {
     private static SensesManager instance;
     private ScheduledExecutorService scheduler;
@@ -112,6 +113,7 @@ public class SensesManager {
         }, 5, TimeUnit.SECONDS);
     }
     
+    @SuppressWarnings("null")
     public void applySense(Sense sense) {
         lastSense = sense; // Remember this sense for next time
         GameManager gm = GameManager.getInstance();
@@ -180,6 +182,7 @@ public class SensesManager {
         player.connection.send(animationPacket);
         
         // Send the title message
+        @SuppressWarnings("null")
         ClientboundSetTitleTextPacket titlePacket = new ClientboundSetTitleTextPacket(message);
         player.connection.send(titlePacket);
     }
@@ -200,6 +203,7 @@ public class SensesManager {
         }
     }
     
+    @SuppressWarnings("null")
     private void clearAllEffects() {
         GameManager gm = GameManager.getInstance();
         

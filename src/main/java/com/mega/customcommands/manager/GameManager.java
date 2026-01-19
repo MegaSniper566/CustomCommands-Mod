@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class GameManager {
     private static GameManager instance;
     private MinecraftServer server;
@@ -67,6 +68,7 @@ public class GameManager {
         return runner;
     }
     
+    @SuppressWarnings("null")
     public ServerPlayer getRunnerPlayer() {
         if (runner == null || server == null) return null;
         return server.getPlayerList().getPlayer(runner);
@@ -81,6 +83,7 @@ public class GameManager {
         if (server == null) return hunterPlayers;
         
         for (UUID hunterUUID : hunters) {
+            @SuppressWarnings("null")
             ServerPlayer player = server.getPlayerList().getPlayer(hunterUUID);
             if (player != null) {
                 hunterPlayers.add(player);
