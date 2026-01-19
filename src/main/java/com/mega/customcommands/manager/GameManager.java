@@ -13,6 +13,7 @@ public class GameManager {
     
     private UUID runner;
     private Set<UUID> hunters = new HashSet<>();
+    private UUID bodyguard;
     
     private GameManager() {}
     
@@ -48,12 +49,25 @@ public class GameManager {
         }
         hunters.add(playerUUID);
     }
+
+    public boolean setBodyguard(UUID playerUUID) {
+        if (bodyguard != null && !bodyguard.equals(playerUUID)) {
+            return false; // Only one bodyguard allowed
+        }
+        // Remove from hunters if they were a hunter
+        hunters.remove(playerUUID);
+        bodyguard = playerUUID;
+        return true;
+    }
     
     public void unassign(UUID playerUUID) {
         if (runner != null && runner.equals(playerUUID)) {
             runner = null;
         }
         hunters.remove(playerUUID);
+        if (bodyguard != null && bodyguard.equals(playerUUID)) {
+            bodyguard = null;
+        }
     }
     
     public boolean isRunner(UUID playerUUID) {
@@ -62,6 +76,10 @@ public class GameManager {
     
     public boolean isHunter(UUID playerUUID) {
         return hunters.contains(playerUUID);
+    }
+
+    public boolean isBodyguard(UUID playerUUID) {
+        return bodyguard != null && bodyguard.equals(playerUUID);
     }
     
     public UUID getRunner() {
@@ -90,6 +108,16 @@ public class GameManager {
             }
         }
         return hunterPlayers;
+    }
+
+    public UUID getBodyguard() {
+        return bodyguard;
+    }
+
+    @SuppressWarnings("null")
+    public ServerPlayer getBodyguardPlayer() {
+        if (bodyguard == null || server == null) return null;
+        return server.getPlayerList().getPlayer(bodyguard);
     }
     
     public boolean hasRunner() {

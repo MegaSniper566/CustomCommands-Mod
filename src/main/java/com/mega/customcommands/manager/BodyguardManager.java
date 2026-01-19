@@ -19,7 +19,7 @@ public class BodyguardManager {
     private UUID bodyguardUUID;
     private int remainingMinutes = 0;
     
-    private static final int DURATION_MINUTES = 15;
+    private static final int DURATION_MINUTES = 15; // 15 minutes
     private static final int ALERT_INTERVAL = 5; // Alert every 5 minutes
     
     private BodyguardManager() {
@@ -49,11 +49,14 @@ public class BodyguardManager {
         bodyguardUUID = player.getUUID();
         remainingMinutes = DURATION_MINUTES;
         
+        // Register with GameManager
+        GameManager gm = GameManager.getInstance();
+        gm.setBodyguard(player.getUUID());
+        
         // Set to survival mode
         player.setGameMode(GameType.SURVIVAL);
         
         // Teleport to runner
-        GameManager gm = GameManager.getInstance();
         ServerPlayer runner = gm.getRunnerPlayer();
         if (runner != null) {
             player.teleportTo(runner.serverLevel(), runner.getX(), runner.getY(), runner.getZ(), 
@@ -119,6 +122,12 @@ public class BodyguardManager {
             bodyguard.sendSystemMessage(Component.literal("Your bodyguard duty has ended!"));
         }
         
+        // Clear the bodyguard from GameManager
+        GameManager gm = GameManager.getInstance();
+        if (bodyguardUUID != null) {
+            gm.unassign(bodyguardUUID);
+        }
+        
         // Clear the bodyguard
         bodyguardUUID = null;
         
@@ -139,6 +148,12 @@ public class BodyguardManager {
         if (bodyguard != null) {
             bodyguard.setGameMode(GameType.SPECTATOR);
             bodyguard.sendSystemMessage(Component.literal("Bodyguard duty ended by command."));
+        }
+        
+        // Clear the bodyguard from GameManager
+        GameManager gm = GameManager.getInstance();
+        if (bodyguardUUID != null) {
+            gm.unassign(bodyguardUUID);
         }
         
         bodyguardUUID = null;

@@ -20,8 +20,8 @@ public class PlayerEventHandler {
         if (event.getEntity() instanceof ServerPlayer player) {
             GameManager gm = GameManager.getInstance();
             
-            // If the player is a hunter, give them a compass
-            if (gm.isHunter(player.getUUID())) {
+            // If the player is a hunter or bodyguard, give them a compass
+            if (gm.isHunter(player.getUUID()) || gm.isBodyguard(player.getUUID())) {
                 giveTrackingCompass(player);
             }
         }
@@ -32,8 +32,8 @@ public class PlayerEventHandler {
         if (event.getEntity() instanceof ServerPlayer player) {
             GameManager gm = GameManager.getInstance();
             
-            // Check if player is a hunter and holding a compass
-            if (gm.isHunter(player.getUUID())) {
+            // Check if player is a hunter or bodyguard and holding a compass
+            if (gm.isHunter(player.getUUID()) || gm.isBodyguard(player.getUUID())) {
                 ItemStack heldItem = event.getItemStack();
                 
                 if (heldItem.getItem() instanceof CompassItem) {
@@ -43,14 +43,14 @@ public class PlayerEventHandler {
         }
     }
     
-    private static void giveTrackingCompass(ServerPlayer player) {
+    public static void giveTrackingCompass(ServerPlayer player) {
         @SuppressWarnings("null")
         ItemStack compass = new ItemStack(Items.COMPASS);
         player.getInventory().add(compass);
     }
     
     @SuppressWarnings("null")
-    private static void updateCompassTracking(ServerPlayer hunter, ItemStack compass) {
+    public static void updateCompassTracking(ServerPlayer player, ItemStack compass) {
         GameManager gm = GameManager.getInstance();
         ServerPlayer runner = gm.getRunnerPlayer();
         
